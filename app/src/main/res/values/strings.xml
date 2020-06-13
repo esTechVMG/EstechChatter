@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Chatter</string>
+    <string name="register_button">Register</string>
+    <string name="login_button">Login</string>
+    <string name="send_hint">Type a message</string>
+    <string name="login_welcome">Welcome to Chatter</string>
+    <string name="login_message">Please, login to access</string>
+    <string name="register_suggestion">No account? Sign up!</string>
+    <string name="email_hint">E-Mail</string>
+    <string name="pass_hint">Password</string>
+    <string name="username_hint">NickName</string>
+    <string name="pass_verify_hint">Confirm Password</string>
+    <string name="field_not_filled">Please fill all login entries</string>
+</resources>
