@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "609826638756",
+    "firebase_url": "https://estechappchat.firebaseio.com",
+    "project_id": "estechappchat",
+    "storage_bucket": "estechappchat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609826638756:android:f0669214061282452c8f31",
+        "android_client_info": {
+          "package_name": "estech.vmg.chatter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "609826638756-v0lpegekkn3al629jtlvteb9h8h8f243.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEfvsiE4HCw_caUUeX-ivreH1Ok_zpDbg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "609826638756-v0lpegekkn3al629jtlvteb9h8h8f243.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
