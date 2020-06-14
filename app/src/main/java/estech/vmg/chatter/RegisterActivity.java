@@ -15,6 +15,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class RegisterActivity extends AppCompatActivity {
     public TextInputEditText pass,verify,user,eMail;
+    public TextInputLayout eMailLayout,passLayout;
     public Button register;
     public FirebaseAuth mAuth;
 
@@ -28,6 +29,8 @@ public class RegisterActivity extends AppCompatActivity {
         user=findViewById(R.id.userNameRegisterInput);
         eMail=findViewById(R.id.eMailRegisterInput);
         register=findViewById(R.id.regRegisterButton);
+        eMailLayout=findViewById(R.id.eMailRegisterLayout);
+        passLayout=findViewById(R.id.passRegisterLayout);
         register.setOnClickListener(v -> {
             String  registerEmail=CommonTools.getStringFromTextInputEditText(eMail),
                     registerUserName=CommonTools.getStringFromTextInputEditText(user),
