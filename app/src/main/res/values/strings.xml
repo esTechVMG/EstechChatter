@@ -11,4 +11,6 @@
     <string name="username_hint">NickName</string>
     <string name="pass_verify_hint">Confirm Password</string>
     <string name="field_not_filled">Please fill all login entries</string>
+    <string name="signout_menu_item">Sign Out</string>
+    <string name="settings_menu_item">Settings</string>
 </resources>
