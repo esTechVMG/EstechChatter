@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Preference category"/>
+    <PreferenceCategory android:title="Style" >
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="useCustomColorsForChat"
+            android:title="Use Custom Bubble Colors" />
+        <ListPreference
+            android:entries="@array/selectable_items"
+            android:entryValues="@array/selectable_colors"
+            android:key="ownUserColor"
+            android:title="My messages"
+            app:dependency="useCustomColorsForChat" />
+        <ListPreference
+            android:entries="@array/selectable_items"
+            android:entryValues="@array/selectable_items"
+            android:key="otherUsersColor"
+            android:title="Others messages"
+            app:dependency="useCustomColorsForChat" />
+    </PreferenceCategory>
 </PreferenceScreen>

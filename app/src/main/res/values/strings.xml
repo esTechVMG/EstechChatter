@@ -13,4 +13,16 @@
     <string name="field_not_filled">Please fill all login entries</string>
     <string name="signout_menu_item">Sign Out</string>
     <string name="settings_menu_item">Settings</string>
+    <string-array name="selectable_items">
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Yellow</item>
+    </string-array>
+    <string-array name="selectable_colors">
+        <item>red</item>
+        <item>blue</item>
+        <item>green</item>
+        <item>yellow</item>
+    </string-array>
 </resources>
