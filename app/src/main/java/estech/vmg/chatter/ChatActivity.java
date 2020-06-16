@@ -5,15 +5,19 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -23,6 +27,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import estech.vmg.chatter.Bubbles.ChatBubbleAdapter;
@@ -54,7 +59,7 @@ public class ChatActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this,
                 RecyclerView.VERTICAL, false);
 
-        llm.setReverseLayout(true);
+        //llm.setReverseLayout(true);
         llm.setStackFromEnd(true);
 
         messages.setLayoutManager(llm);
@@ -74,18 +79,12 @@ public class ChatActivity extends AppCompatActivity {
         Map<String, Object> data = new HashMap<>();
         data.put("exist",true);//Needs at least one value to create document
         db.collection("messages").document(document).set(data, SetOptions.merge());
-        db.collection("messages").document(document).collection("messageList").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                Log.d("DBMessages","Getting Messages");
-                List<DocumentSnapshot> docs =queryDocumentSnapshots.getDocuments();
-                Log.d("BDMessages","Number of messages:" + docs.size());
-                for (int a=0;a!=docs.size();a++){
-                    String user= String.valueOf(docs.get(a).get("user")),text=String.valueOf(docs.get(a).get("text")),date=String.valueOf(docs.get(a).get("date"));
-                    Log.d("DBMessages:","Message from:" + user + "/text: " + text + " /at date:" + date);
-                    messagesList.add(new Message(user,text,date));
-                    adapter.notifyDataSetChanged();
-                }
+        db.collection("messages").document(document).collection("messageList").get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<DocumentSnapshot> docs =queryDocumentSnapshots.getDocuments();
+            for (int a=0;a!=docs.size();a++){
+                String user= String.valueOf(docs.get(a).get("user")),text=String.valueOf(docs.get(a).get("text")),date=String.valueOf(docs.get(a).get("date"));
+                messagesList.add(new Message(user,text,date));
+                adapter.notifyDataSetChanged();
             }
         });
         sendButton.setOnClickListener(v -> {
@@ -93,8 +92,37 @@ public class ChatActivity extends AppCompatActivity {
             messageInput.setText("");
             if(!textToSend.isEmpty()){
                 Message send=new Message(user.getEmail(),textToSend,"Test Date");
-                messagesList.add(send);
                 db.collection("messages").document(document).collection("messageList").add(send);
+            }
+        });
+        db.collection("messages").document(document).collection("messageList").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(e!=null){
+                    Log.w("SnapshotListener","Listen error");
+                    e.printStackTrace();
+                    return;
+                }
+                for (DocumentChange dc : Objects.requireNonNull(queryDocumentSnapshots).getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            Log.d("DataChangeAdded", "Added data: " + dc.getDocument().getData());
+                            QueryDocumentSnapshot doc = dc.getDocument();
+                            String user=(String) doc.get("user"),text=(String)doc.get("text"),date=(String) doc.get("date");
+                            messagesList.add(new Message(user,text,date));
+                            adapter.notifyDataSetChanged();
+                            break;
+                        case MODIFIED:
+                            Log.d("DataChangeModified", "Modified data: " + dc.getDocument().getData());
+                            break;
+                        case REMOVED:
+                            Log.d("DataChangeRemoved", "Removed data: " + dc.getDocument().getData());
+                            break;
+                        default:
+                            Log.d("DataChangeUnknown","Unknown Change in database");
+                    }
+                }
+
             }
         });
     }
