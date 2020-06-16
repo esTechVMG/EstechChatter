@@ -17,6 +17,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Objects;
 
+import estech.vmg.chatter.ChatList.ChatterUser;
+
 public class LoginActivity extends AppCompatActivity {
 
     public Button register,login;
@@ -70,9 +72,9 @@ public class LoginActivity extends AppCompatActivity {
                             //Add to collection in FireStore
                             FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()){
-                                    String token= Objects.requireNonNull(task1.getResult()).getToken();
-                                    ChatterUser chatterUser = new ChatterUser(token,user.getUid());
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    String token= Objects.requireNonNull(task1.getResult()).getToken();
+                                    ChatterUser chatterUser = new ChatterUser(token,user.getUid(),user.getDisplayName(),user.getEmail());
                                     CollectionReference users = db.collection("users");
                                     users.document(Objects.requireNonNull(user.getEmail())).set(chatterUser);
                                 }

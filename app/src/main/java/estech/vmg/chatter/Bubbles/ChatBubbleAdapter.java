@@ -1,48 +1,46 @@
 package estech.vmg.chatter.Bubbles;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import estech.vmg.chatter.R;
 
-public class ChatBubbleAdapter extends BaseAdapter {
-    ChatBubbleAdapter(Context context, ArrayList<Message> messages){
+public class ChatBubbleAdapter extends RecyclerView.Adapter {
+    ArrayList<Message> messages;
+    Context context;
+    public ChatBubbleAdapter(Context context, ArrayList<Message> messages){
         this.context=context;
         this.messages=messages;
     }
-    ArrayList<Message> messages;
-    private final Context context;
-    @Override
-    public int getCount() {
-        return messages.size();
-    }
 
+    @NonNull
     @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ChatBubbleHolder holder;
-        if(convertView==null){
-            convertView=View.inflate(context, R.layout.chat_bubble,null);
-            holder=new ChatBubbleHolder();
-            holder.text=convertView.findViewById(R.id.message);
-            holder.date=convertView.findViewById(R.id.date);
-            convertView.setTag(holder);
-        }else{
-            holder=(ChatBubbleHolder)convertView.getTag();
-        }
-        return convertView;
+        View v = LayoutInflater.from(context).inflate(R.layout.chat_bubble,
+                parent, false);
+        holder = new ChatBubbleHolder(v);
+        return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        ChatBubbleHolder myHolder=(ChatBubbleHolder) holder;
+        Message message= messages.get(position);
+        myHolder.user.setText(message.getUser());
+        myHolder.text.setText(message.getText());
+        myHolder.date.setText(message.getDate());
+    }
+
+    @Override
+    public int getItemCount() {
+        return messages.size();
     }
 }
